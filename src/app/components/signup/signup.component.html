@@ -1,1 +1,39 @@
-<p>signup works!</p>
+<html>
+    <body>
+        
+    
+<div class="signup-container">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+      <h1 class="form-title">Regisztráció</h1>
+  
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Felhasználónév</mat-label>
+        <input matInput formControlName="username" />
+        <mat-error *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+          Valamit azert irj beeeee :3
+        </mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+          Adj meg érvényes email címet!
+        </mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Jelszó</mat-label>
+        <input matInput formControlName="password" type="password" />
+        <mat-error *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+          A jelszónak legalább 6 karakterből kell állnia!!!
+        </mat-error>
+      </mat-form-field>
+    
+      <button mat-raised-button color="primary" type="submit" [disabled]="signupForm.invalid" class="submit-button">
+        Regisztráció
+      </button>
+    </form>
+  </div>
+  </body>
+  </html>

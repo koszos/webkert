@@ -1,4 +1,3 @@
-
 <div class="app-container">
   <mat-toolbar color="primary">
     <button mat-icon-button (click)="sidenav.toggle()">
@@ -6,28 +5,28 @@
     </button>
     <span>{{title}}</span>
     <span class="spacer"></span>
-    <button mat-button routerLink="/home">Home</button>
-    <button mat-button routerLink="/torrent-list">Browse</button>
-    <button *ngIf="!isLoggedIn" mat-button routerLink="/login">Login</button>
-    <button *ngIf="!isLoggedIn" mat-button routerLink="/signup">Sign Up</button>
-    <button *ngIf="isLoggedIn" mat-button routerLink="/profile">Profile</button>
+    <button mat-button routerLink="/home" routerLinkActive="active">Home</button>
+    <button mat-button routerLink="/torrent-list" routerLinkActive="active">Browse</button>
+    <button *ngIf="!isLoggedIn" mat-button routerLink="/login" routerLinkActive="active">Login</button>
+    <button *ngIf="!isLoggedIn" mat-button routerLink="/signup" routerLinkActive="active">Sign Up</button>
+    <button *ngIf="isLoggedIn" mat-button routerLink="/profile" routerLinkActive="active">Profile</button>
     <button *ngIf="isLoggedIn" mat-button (click)="logout()">Logout</button>
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="over">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/home" (click)="sidenav.close()">Home</a>
-      <a mat-list-item routerLink="/torrent-list" (click)="sidenav.close()">Browse Torrents</a>
-      <a *ngIf="!isLoggedIn" mat-list-item routerLink="/login" (click)="sidenav.close()">Login</a>
-      <a *ngIf="!isLoggedIn" mat-list-item routerLink="/signup" (click)="sidenav.close()">Sign Up</a>
-      <a *ngIf="isLoggedIn" mat-list-item routerLink="/profile" (click)="sidenav.close()">Profile</a>
-      <a *ngIf="isLoggedIn" mat-list-item routerLink="/upload" (click)="sidenav.close()">Upload Torrent</a>
-      <a *ngIf="isLoggedIn" mat-list-item (click)="logout(); sidenav.close()">Logout</a>
-    </mat-nav-list>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/home" routerLinkActive="active" (click)="sidenav.close()">Home</a>
+        <a mat-list-item routerLink="/torrent-list" routerLinkActive="active" (click)="sidenav.close()">Browse Torrents</a>
+        <a *ngIf="!isLoggedIn" mat-list-item routerLink="/login" routerLinkActive="active" (click)="sidenav.close()">Login</a>
+        <a *ngIf="!isLoggedIn" mat-list-item routerLink="/signup" routerLinkActive="active" (click)="sidenav.close()">Sign Up</a>
+        <a *ngIf="isLoggedIn" mat-list-item routerLink="/profile" routerLinkActive="active" (click)="sidenav.close()">Profile</a>
+        <a *ngIf="isLoggedIn" mat-list-item (click)="logout(); sidenav.close()">Logout</a>
+      </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="content">
+        <!-- Az aktuális útvonalhoz tartozó komponens itt jelenik meg -->
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>

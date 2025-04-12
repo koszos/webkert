@@ -10,6 +10,7 @@ import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
+import { SignupComponent } from './components/signup/signup.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ import { MatListModule } from '@angular/material/list';
     HomeComponent,
     LoginComponent,
     MatListModule,
+    SignupComponent,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
