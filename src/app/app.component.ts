@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { TorrentListComponent } from './components/torrent-list/torrent-list.component';
 import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from './components/login/login.component';
+import { NgModule } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +23,8 @@ import { LoginComponent } from './components/login/login.component';
     RouterLink,
     TorrentListComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    MatListModule,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
