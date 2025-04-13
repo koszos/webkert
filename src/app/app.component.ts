@@ -11,6 +11,7 @@ import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { SignupComponent } from './components/signup/signup.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -22,11 +23,7 @@ import { SignupComponent } from './components/signup/signup.component';
     MatButtonModule,
     MatIconModule,
     RouterLink,
-    TorrentListComponent,
-    HomeComponent,
-    LoginComponent,
     MatListModule,
-    SignupComponent,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -34,8 +31,13 @@ import { SignupComponent } from './components/signup/signup.component';
 export class AppComponent implements OnInit {
   title = 'CoolWarez420';
   isLoggedIn = false;
+  isMobile = false;
 
-  constructor() {}
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  }
 
   ngOnInit(): void {
     this.checkLoginStatus();

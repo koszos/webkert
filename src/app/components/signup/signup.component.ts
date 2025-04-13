@@ -20,19 +20,22 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
-  signupForm: FormGroup;
+  signupForm!: FormGroup;
+  showMessage = false;
+  constructor(private fb: FormBuilder) {}
 
-  constructor(private fb: FormBuilder) {
-    this.signupForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+  ngOnInit() {
+      this.signupForm = this.fb.group({
+        username: ['', [Validators.required, Validators.minLength(3)]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+      });
   }
+  
 
   onSubmit() {
     if (this.signupForm.valid) {
-      console.log('Form Submitted', this.signupForm.value);
+      this.showMessage = true;
+      console.log('yayyy', this.signupForm.value);
     }
   }
 }

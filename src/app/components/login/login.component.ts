@@ -24,7 +24,7 @@ import { TooltipDirective } from '../../directives/tooltip.directive';
     MatIconModule,
     MatCheckboxModule,
     HighlightDirective,
-    TooltipDirective
+    TooltipDirective,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -51,19 +51,19 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
 
-      // Ellenőrizzük a bejelentkezési adatokat a mock felhasználókkal
+      
       const user = this.users.find(
         (user) => user.username === username && user.password === password
       );
 
       if (user) {
-        // Sikeres bejelentkezés
+     
         console.log('Login successful', user);
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify(user)); // Mentjük el a felhasználói adatokat
+        localStorage.setItem('user', JSON.stringify(user));
         this.router.navigate(['/home']);
       } else {
-        // Hibás bejelentkezési adatok
+  
         console.log('Invalid username or password');
       }
     }

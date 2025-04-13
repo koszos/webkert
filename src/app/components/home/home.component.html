@@ -1,18 +1,37 @@
-  
 <div class="home-container">
-   
-    <header class="header"> 
-        <h1>C00l-W4r3ZZZZZZ 420</h1>        
-    </header>
-    <main class="main-content">
-        <h2>kino</h2>
-        <form class="search-form">
-            <input type="text" placeholder="Search torrents..." />
-            <button type="submit">Search</button>
-        </form>
-    </main>
+  <header class="header">
+    <h1>C00l-W4r3ZZZZZZ 420</h1>
+  </header>
 
-    <footer class="footer">
-        <p>&copy; 2025 Kókány Bt.</p>
-    </footer>
+  <main class="main-content">
+    <!-- Material Card -->
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Kino ajánló</mat-card-title>
+        <mat-card-subtitle>Film és sorozat ajánlások</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>
+          Fedezd fel a legjobb filmeket és sorozatokat! Ne hagyd ki a legújabb ajánlatokat!
+        </p>
+        <mat-button mat-raised-button color="primary" matTooltip="További információk">
+          További ajánlások
+        </mat-button>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <mat-icon>star</mat-icon> 4.5 / 5
+      </mat-card-footer>
+    </mat-card>
+
+    <!-- Tooltip Example -->
+    <button mat-icon-button matTooltip="Kattints ide" aria-label="Info">
+      <mat-icon>info</mat-icon>
+    </button>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Kókány Bt.</p>
+  </footer>
 </div>

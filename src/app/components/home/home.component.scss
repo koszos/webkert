@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Butcherman&display=swap');
+
 $primary-color: black;
 $secondary-color: #96287a;
 $font-stack: 'Arial', sans-serif;
@@ -14,6 +15,7 @@ $gamer: 'Butcherman', sans-serif;
     color: #fff;
     font-family: $gamer;
     text-align: center;
+    padding-top: 60px; /* Hozzáadjuk a navbar helyét, ha szükséges */
 
     h1 {
         font-size: 3rem;
@@ -22,15 +24,12 @@ $gamer: 'Butcherman', sans-serif;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    h2 {
-        font-family: 'Times New Roman', Times, serif;
-    }
 
     p {
         font-size: 1.2rem;
         max-width: 600px;
-
     }
+
     .navbar {
         width: 100%;
         height: 3%;
@@ -45,6 +44,7 @@ $gamer: 'Butcherman', sans-serif;
         top: 0;
         left: 0;
         z-index: 1000;
+
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
@@ -69,6 +69,47 @@ $gamer: 'Butcherman', sans-serif;
         }
     }
 
+    .main-content {
+        margin-top: 100px; 
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .example-card {
+        max-width: 400px;
+        width: 100%;
+        margin: 20px;
+        background-color: #333;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    mat-card-header {
+        background-color: $secondary-color;
+        color: white;
+    }
+
+    mat-card-title {
+        font-family: $font-stack
+    }
+
+    mat-button {
+        margin-top: 1rem;
+    }
+
+    mat-card-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #222;
+    }
+
+    mat-icon {
+        color: #ff4081;
+    }
+
     .button {
         margin-top: 2rem;
         padding: 0.8rem 1.5rem;
@@ -87,3 +128,4 @@ $gamer: 'Butcherman', sans-serif;
         }
     }
 }
+

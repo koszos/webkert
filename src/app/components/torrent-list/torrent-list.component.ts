@@ -38,7 +38,6 @@ import { Comment } from '../../models/comment';
     ReactiveFormsModule,
     RouterLink,
     FileSizePipe,
-    HighlightDirective,
     MatTooltipModule,
   ],
   templateUrl: './torrent-list.component.html',
@@ -141,7 +140,7 @@ export class TorrentListComponent implements OnInit {
       {
         id: 1,
         title: 'The Shawshank Redemption (1994) 1080p BluRay',
-        size: 8500, 
+        size: 850, 
         category: 'Film',
         seeders: 1024,
         leechers: 32,

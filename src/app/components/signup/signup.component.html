@@ -1,7 +1,5 @@
 <html>
     <body>
-        
-    
 <div class="signup-container">
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
       <h1 class="form-title">Regisztráció</h1>
@@ -13,14 +11,7 @@
           Valamit azert irj beeeee :3
         </mat-error>
       </mat-form-field>
-    
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-        <mat-error *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
-          Adj meg érvényes email címet!
-        </mat-error>
-      </mat-form-field>
+  
     
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Jelszó</mat-label>
@@ -33,7 +24,11 @@
       <button mat-raised-button color="primary" type="submit" [disabled]="signupForm.invalid" class="submit-button">
         Regisztráció
       </button>
+      <div *ngIf="showMessage" class="todo-message">
+        TODO!
+      </div>
     </form>
   </div>
+  
   </body>
   </html>

@@ -15,7 +15,7 @@ export class HighlightDirective {
   }
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.highlight(this.appHighlight || this.defaultColor || '#96287a');
+    this.highlight(this.appHighlight || this.defaultColor || '#73656f');
   }
 
   @HostListener('mouseleave') onMouseLeave() {
