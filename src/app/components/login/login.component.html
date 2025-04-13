@@ -1,1 +1,41 @@
-<p>login works!</p>
+<div class="login-container">
+    <mat-card appHighlight="#2c2c6c" defaultColor="#424242" class="login-card">
+      <mat-card-header>
+        <mat-card-title>Belépés</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Felhasználónév</mat-label>
+            <input matInput formControlName="username" appTooltip="Add meg a felhasználóneved">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+              Felhasználónév megadása kötelező
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Jelszó</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" appTooltip="Add meg a jelszavad">
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+              A jelszónak legalább 6 karakterből kell állnia
+            </mat-error>
+          </mat-form-field>
+          
+          <div class="remember-me">
+            <mat-checkbox formControlName="rememberMe" color="primary">Emlékezz rám</mat-checkbox>
+          </div>
+          
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" class="submit-button">
+            Belépés
+          </button>
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button routerLink="/signup">Még nincs fiókod? Regisztrálj!</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

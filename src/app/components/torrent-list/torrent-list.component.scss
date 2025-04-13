@@ -1,0 +1,146 @@
+.torrents-container {
+    padding: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .filter-section {
+    margin-bottom: 24px;
+    
+    mat-card {
+      background-color: #333333;
+      color: white;
+    }
+  }
+  
+  .filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    
+    mat-form-field {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    button {
+      margin-top: 8px;
+      height: 56px;
+    }
+  }
+  
+  .torrents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .torrent-card {
+    background-color: #333333;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    mat-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+  }
+  
+  .torrent-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    
+    .uploaded-info p {
+      margin: 4px 0;
+    }
+  }
+  
+  .seed-leech-info {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .green-icon {
+    color: #4caf50;
+  }
+  
+  .red-icon {
+    color: #f44336;
+  }
+  
+  .download-button {
+    margin-left: auto;
+  }
+  
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      color: #888;
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .filter-controls {
+      flex-direction: column;
+      
+      mat-form-field {
+        width: 100%;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+    
+    .torrent-details {
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .seed-leech-info {
+      justify-content: flex-start;
+    }
+    
+    mat-card-actions {
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      button {
+        flex: 1;
+      }
+      
+      .download-button {
+        flex-basis: 100%;
+        margin-top: 8px;
+        margin-left: 0;
+      }
+    }
+  }

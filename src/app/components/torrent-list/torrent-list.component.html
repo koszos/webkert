@@ -1,2 +1,91 @@
-<p>awdawdwa</p>
+<div class="torrents-container">
+    <div class="filter-section">
+      <mat-card appHighlight="#2c2c6c" defaultColor="#424242">
+        <mat-card-content>
+          <div class="filter-controls">
+            <mat-form-field appearance="outline">
+              <mat-label>Keresés</mat-label>
+              <input matInput [(ngModel)]="searchTerm" (keyup)="applyFilters()" placeholder="Torrent cím..." appTooltip="Keresés a torrentek között">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
   
+            <mat-form-field appearance="outline">
+              <mat-label>Kategória</mat-label>
+              <mat-select [(ngModel)]="selectedCategory" (selectionChange)="applyFilters()" appTooltip="Szűrés kategória szerint">
+                <mat-option value="">Összes</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category.name">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+  
+            <button mat-raised-button color="accent" (click)="clearFilters()">
+              <mat-icon>clear</mat-icon> Szűrők törlése
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  
+    <div class="torrents-list">
+      <mat-card *ngFor="let torrent of getPaginatedTorrents()" class="torrent-card" appHighlight="#2e2e50" defaultColor="#333333">
+        <mat-card-header>
+          <mat-card-title>{{ torrent.title }}</mat-card-title>
+          <mat-card-subtitle>
+            <mat-chip-set>
+              <mat-chip>{{ torrent.category }}</mat-chip>
+              <mat-chip highlighted>{{ torrent.size | filesize }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="torrent-details">
+            <div class="uploaded-info">
+              <p><strong>Feltöltve:</strong> {{ torrent.uploadedAt | date }}</p>
+              <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+            </div>
+            
+            <div class="seed-leech-info">
+              <div class="info-item" appTooltip="Seederek száma">
+                <mat-icon class="green-icon">arrow_upward</mat-icon>
+                <span>{{ torrent.seeders }}</span>
+              </div>
+              <div class="info-item" appTooltip="Leecherek száma">
+                <mat-icon class="red-icon">arrow_downward</mat-icon>
+                <span>{{ torrent.leechers }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        
+        <mat-divider></mat-divider>
+        
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>info</mat-icon> Részletek
+          </button>
+          <button mat-button color="accent">
+            <mat-icon>comment</mat-icon> Hozzászólások
+          </button>
+          <button mat-raised-button color="primary" class="download-button">
+            <mat-icon>download</mat-icon> Letöltés
+          </button>
+        </mat-card-actions>
+      </mat-card>
+  
+      <div *ngIf="filteredTorrents.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <p>Nincsenek a keresésnek megfelelő torrentek</p>
+      </div>
+    </div>
+  
+    <mat-paginator 
+      [length]="filteredTorrents.length"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      aria-label="Válassz oldalt">
+    </mat-paginator>
+  </div>
