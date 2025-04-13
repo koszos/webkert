@@ -7,4 +7,5 @@ export interface Torrent {
         leechers: number;
         uploadedAt: Date;
         uploader: string;
+        comments?: Comment[]; // koszonom TAB, hogy random kommentezni akarsz :DDDD
 }

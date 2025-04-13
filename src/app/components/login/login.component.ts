@@ -33,6 +33,12 @@ export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
 
+  // Mock adat
+  private users = [
+    { username: 'testuser', password: 'password123', fullName: 'Test User' },
+    { username: 'admin', password: 'admin123', fullName: 'Admin User' }
+  ];
+
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -43,10 +49,23 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login form submitted', this.loginForm.value);
-      
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
+      const { username, password } = this.loginForm.value;
+
+      // Ellenőrizzük a bejelentkezési adatokat a mock felhasználókkal
+      const user = this.users.find(
+        (user) => user.username === username && user.password === password
+      );
+
+      if (user) {
+        // Sikeres bejelentkezés
+        console.log('Login successful', user);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(user)); // Mentjük el a felhasználói adatokat
+        this.router.navigate(['/home']);
+      } else {
+        // Hibás bejelentkezési adatok
+        console.log('Invalid username or password');
+      }
     }
   }
 }

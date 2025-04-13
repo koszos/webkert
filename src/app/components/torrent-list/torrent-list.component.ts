@@ -16,7 +16,8 @@ import { Torrent } from '../../models/torrent.model';
 import { Category } from '../../models/category';
 import { FileSizePipe } from '../../pipes/filesize.pipe';
 import { HighlightDirective } from '../../directives/highlight.directive';
-import { TooltipDirective } from '../../directives/tooltip.directive';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Comment } from '../../models/comment';
 
 @Component({
   selector: 'app-torrent-list',
@@ -38,7 +39,7 @@ import { TooltipDirective } from '../../directives/tooltip.directive';
     RouterLink,
     FileSizePipe,
     HighlightDirective,
-    TooltipDirective
+    MatTooltipModule,
   ],
   templateUrl: './torrent-list.component.html',
   styleUrl: './torrent-list.component.scss'
@@ -51,7 +52,6 @@ export class TorrentListComponent implements OnInit {
   searchTerm: string = '';
   selectedCategory: string = '';
   
-  // Pagination
   pageSize = 5;
   pageIndex = 0;
   pageSizeOptions = [5, 10, 25];
@@ -82,7 +82,7 @@ export class TorrentListComponent implements OnInit {
       return matchesSearch && matchesCategory;
     });
     
-    this.pageIndex = 0; // Reset to first page when filtering
+    this.pageIndex = 0; 
   }
 
   clearFilters(): void {
@@ -94,21 +94,55 @@ export class TorrentListComponent implements OnInit {
 
   getCategories(): Category[] {
     return [
-      { id: 1, name: 'Movies' },
-      { id: 2, name: 'TV Shows' },
-      { id: 3, name: 'Music' },
-      { id: 4, name: 'Software' },
-      { id: 5, name: 'Games' }
+      { id: 1, name: 'Film' },
+      { id: 2, name: 'Sorozat' },
+      { id: 3, name: 'Muzsika' },
+      { id: 4, name: 'Szoftver' },
+      { id: 5, name: 'Jatek' }
     ];
   }
-
-  getMockTorrents(): Torrent[] {
+  getMockComments(): Comment[] {
     return [
       {
         id: 1,
+        userId: 101,
+        torrentId: 1,
+        text: "Kiváló minőségű feltöltés, köszönöm!",
+        creationDate: new Date('2024-04-05')
+      },
+      {
+        id: 2,
+        userId: 102,
+        torrentId: 1,
+        text: "Jól működik, ajánlom mindenkinek!",
+        creationDate: new Date('2024-04-07')
+      },
+      {
+        id: 3,
+        userId: 103,
+        torrentId: 2,
+        text: "Végre megtaláltam jó minőségben, köszi!",
+        creationDate: new Date('2024-04-02')
+      },
+      {
+        id: 4,
+        userId: 103,
+        torrentId: 5,
+        text: "gitgud",
+        creationDate: new Date('2024-04-13')
+      }
+    ];
+  }
+  
+
+  getMockTorrents(): Torrent[] {
+    const comments = this.getMockComments();
+    const torrents = [
+      {
+        id: 1,
         title: 'The Shawshank Redemption (1994) 1080p BluRay',
-        size: 8500, // In MB
-        category: 'Movies',
+        size: 8500, 
+        category: 'Film',
         seeders: 1024,
         leechers: 32,
         uploadedAt: new Date('2024-04-01'),
@@ -117,8 +151,8 @@ export class TorrentListComponent implements OnInit {
       {
         id: 2,
         title: 'Breaking Bad Complete Series S01-S05 720p',
-        size: 45000, // In MB
-        category: 'TV Shows',
+        size: 45000, 
+        category: 'Sorozat',
         seeders: 850,
         leechers: 76,
         uploadedAt: new Date('2024-03-25'),
@@ -127,7 +161,7 @@ export class TorrentListComponent implements OnInit {
       {
         id: 3,
         title: 'Adobe Photoshop 2025 Full Version',
-        size: 2300, // In MB
+        size: 2300, 
         category: 'Software',
         seeders: 537,
         leechers: 128,
@@ -137,8 +171,8 @@ export class TorrentListComponent implements OnInit {
       {
         id: 4,
         title: 'Top Albums Collection 2024 FLAC',
-        size: 5600, // In MB
-        category: 'Music',
+        size: 5600, 
+        category: 'Muzsika',
         seeders: 312,
         leechers: 45,
         uploadedAt: new Date('2024-04-02'),
@@ -147,8 +181,8 @@ export class TorrentListComponent implements OnInit {
       {
         id: 5,
         title: 'Elden Ring Deluxe Edition',
-        size: 68000, // In MB
-        category: 'Games',
+        size: 68000, 
+        category: 'Jatek',
         seeders: 1432,
         leechers: 256,
         uploadedAt: new Date('2024-03-15'),
@@ -157,8 +191,8 @@ export class TorrentListComponent implements OnInit {
       {
         id: 6,
         title: 'The Dark Knight Trilogy 4K HDR',
-        size: 75000, // In MB
-        category: 'Movies',
+        size: 75000, 
+        category: 'Film',
         seeders: 943,
         leechers: 87,
         uploadedAt: new Date('2024-03-28'),
@@ -167,15 +201,25 @@ export class TorrentListComponent implements OnInit {
       {
         id: 7,
         title: 'Windows 11 Pro 22H2',
-        size: 5200, // In MB
-        category: 'Software',
+        size: 5200, 
+        category: 'Szoftver',
         seeders: 1876,
         leechers: 432,
         uploadedAt: new Date('2024-04-10'),
         uploader: 'OSExpert'
       }
     ];
+    torrents.forEach(torrent => {
+      (torrent as any).comments = comments.filter(comment => comment.torrentId === torrent.id);
+    });
+
+    return torrents;
   }
+
+  getCommentCount(torrent: Torrent): number {
+    return torrent.comments?.length || 0;
+  }
+  
 
   getPaginatedTorrents(): Torrent[] {
     const startIndex = this.pageIndex * this.pageSize;

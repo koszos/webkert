@@ -32,7 +32,6 @@ export class ProfileComponent implements OnInit {
   currentUser: User = {
     id: 1,
     username: 'TorrentUser123',
-    email: 'user@example.com',
     role: 'user',
     joinedAt: new Date('2023-10-15')
   };
