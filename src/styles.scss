@@ -2,7 +2,7 @@
 
 :root {
     @include mat.toolbar-overrides(
-        (container-background-color: blue,
+        (container-background-color: rgb(85, 85, 158),
         container-text-color: white,)
     );
 }
