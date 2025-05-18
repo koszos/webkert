@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signOut } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -8,18 +8,22 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private auth: Auth, private router: Router) {}
 
-  async logout(): Promise<void> {
+  async login(email: string, password: string): Promise<void> {
     try {
-      await signOut(this.auth);
-      localStorage.removeItem('isLoggedIn');
-      this.router.navigate(['/login']);
+      await signInWithEmailAndPassword(this.auth, email, password);
+      this.router.navigate(['/home']);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('Bejelentkezési hiba:', error);
       throw error;
     }
   }
 
-  isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
+  async logout(): Promise<void> {
+    await signOut(this.auth);
+    this.router.navigate(['/login']);
+  }
+
+  getCurrentUser() {
+    return this.auth.currentUser;
   }
 }

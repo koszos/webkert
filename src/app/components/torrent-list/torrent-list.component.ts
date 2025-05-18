@@ -217,7 +217,7 @@ export class TorrentListComponent implements OnInit {
 
   getCommentCount(torrent: Torrent): number {
     return torrent.comments?.length || 0;
-  }
+  } //todo innen ezt majd a pipebol elerni, bar idk maradhat itt is
   
 
   getPaginatedTorrents(): Torrent[] {

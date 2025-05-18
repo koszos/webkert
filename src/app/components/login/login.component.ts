@@ -65,7 +65,6 @@ export class LoginComponent {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       const user = userCredential.user;
 
-      // Felhasználói adatok mentése és átirányítás profilra
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('user', JSON.stringify({
         uid: user.uid,
@@ -74,7 +73,7 @@ export class LoginComponent {
         photoURL: user.photoURL
       }));
       
-      this.router.navigate(['/profile']); //BREATHING BLACK TARRRRRRRRRR
+      this.router.navigate(['/home']); //BREATHING BLACK TARRRRRRRRRR
       
     } catch (error) {
       console.error('Login error:', error);
