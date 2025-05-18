@@ -5,9 +5,8 @@ import { routes } from './app.routes';
 import { initializeApp } from 'firebase/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { provideFirebaseApp } from '@angular/fire/app';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AuthGuard } from './guards/auth/auth.guard';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAHqDTD05TZc9yTYt8O8DzTC8UTDpvtHRc",
@@ -25,14 +24,11 @@ const firestore = getFirestore(app);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAnimations(),
-    provideAnimationsAsync(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth(app)),
-    provideFirestore(() => getFirestore(app)),
-    {provide: 'AuthGuard', useValue: AuthGuard},
-    ]
-
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideAnimationsAsync()
+  ]
 };

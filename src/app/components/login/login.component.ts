@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,7 +29,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSnackBarModule,
     HighlightDirective,
     TooltipDirective,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -65,23 +66,24 @@ export class LoginComponent {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       const user = userCredential.user;
 
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('user', JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL
-      }));
-      
-      this.router.navigate(['/home']); //BREATHING BLACK TARRRRRRRRRR
+      if (this.loginForm.value.rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+
+      this.snackBar.open('Sikeres bejelentkezés!', 'OK', { duration: 3000 });
+      this.router.navigate(['/home']);
       
     } catch (error) {
       console.error('Login error:', error);
       this.errorMessage = this.getErrorMessage(error);
+      this.snackBar.open(this.errorMessage, 'Bezár', { duration: 5000 });
     } finally {
       this.isLoading = false;
     }
   }
+
 
   private getErrorMessage(error: any): string {
     switch (error.code) {

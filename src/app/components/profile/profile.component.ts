@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { TorrentService, Torrent, Comment } from '../../services/torrent.service';
-import { Auth } from '@angular/fire/auth';
+import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TorrentService, Torrent } from '../../services/torrent.service';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,16 +40,18 @@ export class ProfileComponent implements OnInit {
   uploadSuccess = false;
   errorMessage = '';
   currentUser: any;
-  torrentForm = this.createForm();
+  torrentForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     public torrentService: TorrentService,
     private auth: Auth
-  ) {}
+  ) {
+    this.initializeForm();
+  }
 
-  private createForm() {
-    return this.fb.group({
+  private initializeForm() {
+    this.torrentForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       size: [0, [Validators.required, Validators.min(1)]],
       category: ['', Validators.required],
@@ -58,17 +60,13 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser;
-    this.loadUserTorrents();
+    onAuthStateChanged(this.auth, (user) => {
+      this.currentUser = user;
+      if (user?.displayName) {
+        this.userTorrents$ = this.torrentService.getUserTorrents(user.displayName);
+      }
+    });
   }
-
-  private loadUserTorrents() {
-    if (this.currentUser?.displayName) {
-      this.userTorrents$ = this.torrentService.getUserTorrents(this.currentUser.displayName);
-    }
-  }
-
-
 
   async uploadTorrent() {
     if (this.torrentForm.invalid || this.isUploading || !this.currentUser) return;
@@ -92,7 +90,7 @@ export class ProfileComponent implements OnInit {
       await this.torrentService.addTorrent(newTorrent);
       this.uploadSuccess = true;
       this.torrentForm.reset();
-      this.loadUserTorrents();
+      this.userTorrents$ = this.torrentService.getUserTorrents(this.currentUser.displayName);
     } catch (error) {
       console.error('Hiba történt:', error);
       this.errorMessage = 'Hiba történt a feltöltés során';
