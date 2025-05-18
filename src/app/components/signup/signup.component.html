@@ -1,34 +1,50 @@
-<html>
-    <body>
 <div class="signup-container">
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
-      <h1 class="form-title">Regisztráció</h1>
-  
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Felhasználónév</mat-label>
-        <input matInput formControlName="username" />
-        <mat-error *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
-          Valamit azert irj beeeee :3
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+    <h1 class="form-title">Regisztráció</h1>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Felhasználónév</mat-label>
+      <input matInput formControlName="username" />
+      @if (signupForm.get('username')?.invalid && signupForm.get('username')?.touched) {
+        <mat-error>
+          A felhasználónévnek legalább 3 karakter hosszúnak kell lennie
         </mat-error>
-      </mat-form-field>
-  
-    
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Jelszó</mat-label>
-        <input matInput formControlName="password" type="password" />
-        <mat-error *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
-          A jelszónak legalább 6 karakterből kell állnia!!!
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+      @if (signupForm.get('email')?.invalid && signupForm.get('email')?.touched) {
+        <mat-error>
+          érvényes email címet adj meg
         </mat-error>
-      </mat-form-field>
-    
-      <button mat-raised-button color="primary" type="submit" [disabled]="signupForm.invalid" class="submit-button">
-        Regisztráció
-      </button>
-      <div *ngIf="showMessage" class="todo-message">
-        TODO!
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Jelszó</mat-label>
+      <input matInput formControlName="password" type="password" />
+      @if (signupForm.get('password')?.invalid && signupForm.get('password')?.touched) {
+        <mat-error>
+          A jelszónak legalább 6 karakter hosszúnak kell lennie
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="signupForm.invalid">
+      Regisztráció
+    </button>
+
+    @if (errorMessage) {
+      <div class="error-message">
+        {{ errorMessage }}
       </div>
-    </form>
-  </div>
-  
-  </body>
-  </html>
+    }
+    @if (successMessage) {
+      <div class="success-message">
+        {{ successMessage }}
+      </div>
+    }
+  </form>
+</div>

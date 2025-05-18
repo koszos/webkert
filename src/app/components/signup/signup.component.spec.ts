@@ -1,23 +1,42 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
-import { SignupComponent } from './signup.component';
+@Component({
+  selector: 'app-signup',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
+})
+export class SignupComponent {
+  signupForm: FormGroup;
+  errorMessage = '';
+  successMessage = '';
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
-  let fixture: ComponentFixture<SignupComponent>;
+  constructor(private fb: FormBuilder) {
+    this.signupForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SignupComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(SignupComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  onSubmit() {
+    if (this.signupForm.valid) {
+      this.successMessage = 'Sikeres regisztráció!';
+      console.log('gamin:', this.signupForm.value);
+    } else {
+      this.errorMessage = 'probald ujra!';
+    }
+  }
+}

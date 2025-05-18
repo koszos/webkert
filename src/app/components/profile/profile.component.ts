@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatListModule } from '@angular/material/list';
-import { User } from '../../models/user';
-import { Torrent } from '../../models/torrent.model';
-import { TooltipDirective } from '../../directives/tooltip.directive';
-import { HighlightDirective } from '../../directives/highlight.directive';
+import { Auth, User as FirebaseUser } from '@angular/fire/auth';
+
+interface AppUser {
+  username: string;
+  joinedAt: Date;
+  role: 'user' | 'admin';
+  email: string;
+  uid: string;
+}
 
 @Component({
   selector: 'app-profile',
@@ -17,60 +19,40 @@ import { HighlightDirective } from '../../directives/highlight.directive';
   imports: [
     CommonModule,
     MatCardModule,
-    MatTabsModule,
     MatIconModule,
     MatButtonModule,
-    MatDividerModule,
-    MatListModule,
-    TooltipDirective,
-    HighlightDirective
+    DatePipe
   ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  currentUser: User = {
-    id: 1,
-    username: 'TorrentUser123',
+  currentUser: AppUser = {
+    username: 'Betöltés...',
+    joinedAt: new Date(),
     role: 'user',
-    joinedAt: new Date('2023-10-15')
+    email: 'betöltés...',
+    uid: ''
   };
 
-  userTorrents: Torrent[] = [];
+  constructor(private auth: Auth) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.userTorrents = this.getMockUserTorrents();
-  }
-
-  onUpdateStats(event: {uploads: number, downloads: number}): void {
-    console.log('Stats updated:', event);
-    //todo
-  }
-
-  getMockUserTorrents(): Torrent[] {
-    return [
-      {
-        id: 8,
-        title: 'The Matrix Trilogy 4K HDR',
-        size: 65000,
-        category: 'Movies',
-        seeders: 756,
-        leechers: 92,
-        uploadedAt: new Date('2024-02-15'),
-        uploader: 'TorrentUser123'
-      },
-      {
-        id: 9,
-        title: 'Microsoft Office 2025 Professional',
-        size: 4300,
-        category: 'Software',
-        seeders: 452,
-        leechers: 187,
-        uploadedAt: new Date('2024-03-22'),
-        uploader: 'TorrentUser123'
+  ngOnInit() {
+    const user = this.auth.currentUser;
+    
+    if (user) {
+      this.currentUser = {
+        username: user.displayName || 'Felhasználó',
+        joinedAt: new Date(user.metadata.creationTime || Date.now()),
+        role: user.email?.endsWith('@admin.com') ? 'admin' : 'user',
+        email: user.email || 'nincs email',
+        uid: user.uid
+      };
+    } else {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        this.currentUser = JSON.parse(savedUser);
       }
-    ];
+    }
   }
 }

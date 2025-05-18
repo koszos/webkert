@@ -8,8 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HighlightDirective } from '../../directives/highlight.directive';
 import { TooltipDirective } from '../../directives/tooltip.directive';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -23,49 +26,76 @@ import { TooltipDirective } from '../../directives/tooltip.directive';
     MatCardModule,
     MatIconModule,
     MatCheckboxModule,
+    MatSnackBarModule,
     HighlightDirective,
     TooltipDirective,
+    MatProgressSpinnerModule
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
+  errorMessage = '';
+  isLoading = false;
 
-  // Mock adat
-  private users = [
-    { username: 'testuser', password: 'password123', fullName: 'Test User' },
-    { username: 'admin', password: 'admin123', fullName: 'Admin User' }
-  ];
-
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private auth: Auth
+  ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
+  async onSubmit() {
+    if (this.loginForm.invalid) return;
+    
+    this.isLoading = true;
+    this.errorMessage = '';
 
+    const { email, password } = this.loginForm.value;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      const user = userCredential.user;
+
+      // Felhasználói adatok mentése és átirányítás profilra
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('user', JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      }));
       
-      const user = this.users.find(
-        (user) => user.username === username && user.password === password
-      );
+      this.router.navigate(['/profile']); //BREATHING BLACK TARRRRRRRRRR
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      this.errorMessage = this.getErrorMessage(error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
 
-      if (user) {
-     
-        console.log('Login successful', user);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify(user));
-        this.router.navigate(['/home']);
-      } else {
-  
-        console.log('Invalid username or password');
-      }
+  private getErrorMessage(error: any): string {
+    switch (error.code) {
+      case 'auth/user-not-found':
+        return 'nope, nincs ilyen felhasznalo';
+      case 'auth/wrong-password':
+        return 'Nem nyert :c';
+      case 'auth/too-many-requests':
+        return 'gyere vissza kesobb......';
+      case 'auth/invalid-email':
+        return 'elirtad az emailt :c';
+      default:
+        return 'HIBAAAAAAAAAAA';
     }
   }
 }

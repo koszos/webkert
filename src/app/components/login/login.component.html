@@ -1,41 +1,67 @@
 <div class="login-container">
-    <mat-card appHighlight="#c3c3de" defaultColor="#424242" class="login-card">
-      <mat-card-header>
-        <mat-card-title>Belépés</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Felhasználónév</mat-label>
-            <input matInput formControlName="username" appTooltip="Add meg a felhasználóneved">
-            <mat-icon matSuffix>person</mat-icon>
-            <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-              Felhasználónév megadása kötelező
+  <mat-card appHighlight="#c3c3de" defaultColor="#424242" class="login-card">
+    <mat-card-header>
+      <mat-card-title>Belépés</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" appTooltip="Add meg a regisztrált email címed">
+          <mat-icon matSuffix>email</mat-icon>
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <mat-error>
+              @if (loginForm.get('email')?.errors?.['required']) {
+                Email cím megadása kötelező
+              }
+              @if (loginForm.get('email')?.errors?.['email']) {
+                Kérjük érvényes email címet adj meg
+              }
             </mat-error>
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Jelszó</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" appTooltip="Add meg a jelszavad">
-            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-              A jelszónak legalább 6 karakterből kell állnia
-            </mat-error>
-          </mat-form-field>
-          
-          <div class="remember-me">
-            <mat-checkbox formControlName="rememberMe" color="primary">Emlékezz rám</mat-checkbox>
-          </div>
-          
-          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" class="submit-button">
-            Belépés
+          }
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Jelszó</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" 
+                 formControlName="password" appTooltip="Add meg a jelszavad">
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-        </form>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-button routerLink="/signup">Még nincs fiókod? Regisztrálj!</button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <mat-error>
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Jelszó megadása kötelező
+              }
+              @if (loginForm.get('password')?.errors?.['minlength']) {
+                A jelszónak legalább 6 karakterből kell állnia
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+        
+        <div class="remember-me">
+          <mat-checkbox formControlName="rememberMe" color="primary">Emlékezz rám</mat-checkbox>
+        </div>
+        
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+        
+        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading" class="submit-button">
+          @if (isLoading) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Belépés
+          }
+        </button>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button routerLink="/signup">Még nincs fiókod? Regisztrálj!</button>
+      <button mat-button routerLink="/forgot-password">Elfelejtetted a jelszavad?</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

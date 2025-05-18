@@ -1,56 +1,30 @@
 <div class="profile-container">
-    <div class="profile-header">
-      <mat-card appHighlight="#2c2c6c" defaultColor="#424242">
-        <mat-card-header>
-          <div mat-card-avatar class="profile-avatar">
-            <mat-icon>account_circle</mat-icon>
-          </div>
-          <mat-card-title>{{ currentUser.username }}</mat-card-title>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <div class="user-info">
-            <p><strong>Regisztrált:</strong> {{ currentUser.joinedAt | date:'longDate' }}</p>
-            <p><strong>Szerepkör:</strong> {{ currentUser.role === 'admin' ? 'Adminisztrátor' : 'Felhasználó' }}</p>
-          </div>
-        </mat-card-content>
-        
-        <mat-card-actions>
-          <button mat-button color="primary" appTooltip="Profil szerkesztése">
-            <mat-icon>edit</mat-icon> Szerkesztés
-          </button>
-          <button mat-button color="warn" appTooltip="Fiók törlése">
-            <mat-icon>delete</mat-icon> Fiók törlése
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <!--
-    <div class="profile-content">
-      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Statisztikák">
-          <app-user-stats
-          //  [username]="currentUser.username"
-            [joinedDate]="currentUser.joinedAt"
-            [uploadCount]="userTorrents.length"
-            [downloadCount]="15"
-            (statsUpdated)="onUpdateStats($event)">
-          </app-user-stats> 
-        </mat-tab>
-        
-        <mat-tab label="Feltöltött Torrentek">
-          <app-user-torrents
-            [torrents]="userTorrents"
-            [username]="currentUser.username">
-          </app-user-torrents>
-        </mat-tab>
-        
-        <mat-tab label="Beállítások">
-          <div class="tab-content">
-            <h3>Fiók beállítások</h3>
-            <p>asdawdawdqwada2dawd aw</p>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>-->
+  <div class="profile-header">
+    <mat-card appHighlight="#2c2c6c" defaultColor="#424242">
+      <mat-card-header>
+        <div mat-card-avatar class="profile-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <mat-card-title>{{ currentUser.username }}</mat-card-title>
+        <mat-card-subtitle>{{ currentUser.email }}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="user-info">
+          <p><strong>Regisztrált:</strong> {{ currentUser.joinedAt | date:'longDate' }}</p>
+          <p><strong>Szerepkör:</strong> {{ currentUser.role === 'admin' ? 'Adminisztrátor' : 'Felhasználó' }}</p>
+          <p><strong>Felhasználó ID:</strong> {{ currentUser.uid }}</p>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-button color="primary" appTooltip="Profil szerkesztése">
+          <mat-icon>edit</mat-icon> Szerkesztés
+        </button>
+        <button mat-button color="warn" appTooltip="Fiók törlése">
+          <mat-icon>delete</mat-icon> Fiók törlése
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
+</div>

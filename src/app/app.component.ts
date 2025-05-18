@@ -5,16 +5,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { TorrentListComponent } from './components/torrent-list/torrent-list.component';
-import { HomeComponent } from "./components/home/home.component";
-import { LoginComponent } from './components/login/login.component';
-import { NgModule } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
-import { SignupComponent } from './components/signup/signup.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -24,7 +21,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatIconModule,
     RouterLink,
     MatListModule,
-],
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -33,7 +30,11 @@ export class AppComponent implements OnInit {
   isLoggedIn = false;
   isMobile = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       this.isMobile = result.matches;
     });
@@ -44,16 +45,19 @@ export class AppComponent implements OnInit {
   }
 
   checkLoginStatus(): void {
-    this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   logout(): void {
-    localStorage.setItem('isLoggedIn', 'false');
-    this.isLoggedIn = false;
-    window.location.href = '/home';
+    this.authService.logout().then(() => {
+      this.isLoggedIn = false;
+      this.router.navigate(['/login']);
+    }).catch(error => {
+      console.error('Logout error:', error);
+    });
   }
 
-  onToggleSidenav(sidenav: MatSidenav){
+  onToggleSidenav(sidenav: MatSidenav) {
     sidenav.toggle();
   }
 }
