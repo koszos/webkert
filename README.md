@@ -1,6 +1,7 @@
 # WebkertWarez
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+asd@gmail.com pw: asd123
 
 ## Development server
 
