@@ -11,6 +11,78 @@
     </mat-card-header>
 
     <mat-card-content>
+      <div class="profile-edit-section">
+        <h3>Profil szerkesztése</h3>
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Megjelenítendő név</mat-label>
+            <input matInput formControlName="displayName">
+            @if (profileForm.get('displayName')?.hasError('required')) {
+              <mat-error>Kötelező mező</mat-error>
+            }
+            @if (profileForm.get('displayName')?.hasError('minlength')) {
+              <mat-error>A név legalább 3 karakter hosszú legyen, jó???</mat-error>
+            }
+          </mat-form-field>
+
+         
+
+          <div class="button-group">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="profileForm.invalid || isUpdating"
+              class="update-button"
+            >
+              @if (isUpdating) {
+                <ng-container>
+                <mat-icon>
+                  <mat-spinner diameter="20"></mat-spinner>
+                </mat-icon>
+                </ng-container>
+                Frissítés...
+              } @else {
+                Profil frissítése
+              }
+            </button>
+            
+            <button
+              mat-raised-button
+              color="warn"
+              type="button"
+              [disabled]="isDeleting"
+              class="delete-button"
+            >
+              @if (isDeleting) {
+                <ng-container>
+                  <mat-icon>
+                    <mat-spinner diameter="20"></mat-spinner>
+                  </mat-icon>
+               </ng-container>
+                Törlés...
+              } @else {
+                Fiók törlése
+              }
+            </button>
+          </div>
+
+          @if (updateSuccess) {
+            <div class="success-message">
+              <mat-icon>check_circle</mat-icon>
+              A profil sikeresen frissítve!
+            </div>
+          }
+
+          @if (errorMessage) {
+            <div class="error-message">
+              <mat-icon>error</mat-icon>
+              {{ errorMessage }}
+            </div>
+          }
+        </form>
+      </div>
+      <!-- uhmmm -->
       <div class="torrent-upload-section">
         <h3>Új Torrent Feltöltése</h3>
 
@@ -18,20 +90,20 @@
           <mat-form-field appearance="outline">
             <mat-label>Torrent neve</mat-label>
             <input matInput formControlName="title">
-            <mat-error *ngIf="torrentForm.get('title')?.hasError('required')">
-              Kötelező mező
-            </mat-error>
+            @if (torrentForm.get('title')?.hasError('required')) {
+              <mat-error>Kötelező mező</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Méret (MB)</mat-label>
             <input matInput type="number" formControlName="size">
-            <mat-error *ngIf="torrentForm.get('size')?.hasError('required')">
-              Kötelező mező
-            </mat-error>
-            <mat-error *ngIf="torrentForm.get('size')?.hasError('min')">
-              A méret nem lehet kisebb, mint 1 MB
-            </mat-error>
+            @if (torrentForm.get('size')?.hasError('required')) {
+              <mat-error>Kötelező mező</mat-error>
+            }
+            @if (torrentForm.get('size')?.hasError('min')) {
+              <mat-error>A méret nem lehet kisebb, mint 1 MB!!!!</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -52,48 +124,60 @@
             [disabled]="torrentForm.invalid || isUploading"
             class="upload-button"
           >
-            <mat-icon *ngIf="isUploading">
-              <mat-spinner diameter="20"></mat-spinner>
-            </mat-icon>
-            {{ isUploading ? 'Feltöltés...' : 'Feltöltés' }}
+            @if (isUploading) {
+              <ng-container>
+                <mat-icon>
+                  <mat-spinner diameter="20"></mat-spinner>
+                </mat-icon>
+                Feltöltés...
+              </ng-container>
+            } @else {
+              Feltöltés
+            }
           </button>
 
-          <div *ngIf="uploadSuccess" class="success-message">
-            <mat-icon>check_circle</mat-icon>
-            A torrent sikeresen feltöltve!
-          </div>
-
-          <div *ngIf="errorMessage" class="error-message">
-            <mat-icon>error</mat-icon>
-            {{ errorMessage }}
-          </div>
+          @if (uploadSuccess) {
+            <div class="success-message">
+              <mat-icon>check_circle</mat-icon>
+              A torrent sikeresen feltöltve!
+            </div>
+          }
         </form>
       </div>
-
       <div class="user-torrents">
         <h3>Feltöltött Torrentjeim</h3>
-        <div *ngIf="userTorrents$ | async as torrents; else loading">
-          <div *ngFor="let torrent of torrents" class="torrent-card">
-            <div class="torrent-header">
-              <h4>{{ torrent.title }}</h4>
-              <span class="torrent-category">{{ torrent.category }}</span>
+        @if (userTorrents$ | async; as torrents) {
+          @if (torrents.length > 0) {
+            @for (torrent of torrents; track torrent.id) {
+              <div class="torrent-card">
+                <div class="torrent-header">
+                  <h4>{{ torrent.title }}</h4>
+                  <span class="torrent-category">{{ torrent.category }}</span>
+                </div>
+                <div class="torrent-meta">
+                  <span><mat-icon>save</mat-icon> {{ torrent.size | filesize }}</span>
+                  <span><mat-icon>arrow_upward</mat-icon> {{ torrent.seeders | formatPeerCount }} seeders</span>
+                  <span><mat-icon>arrow_downward</mat-icon> {{ torrent.leechers | formatPeerCount }} leechers</span>
+                  <span><mat-icon>calendar_today</mat-icon> {{ torrent.uploadedAt | date }}</span>
+                  <span><mat-icon>person</mat-icon> {{ torrent.uploader }}</span>
+                </div>
+                @if (torrent.comments?.length) {
+                  <div class="torrent-comments">
+                    <mat-icon>comment</mat-icon>
+                    {{ torrentService.getTorrentCommentCount(torrent) }} komment
+                  </div>
+                }
+              </div>
+            }
+          } @else {
+            <div class="no-content-message">
+              <mat-icon>info</mat-icon>
+              Még nincs feltöltött torrented.
             </div>
-            <div class="torrent-meta">
-              <span><mat-icon>save</mat-icon> {{ torrent.size | filesize }}</span>
-              <span><mat-icon>arrow_upward</mat-icon> {{ torrent.seeders | formatPeerCount }} seeders</span>
-              <span><mat-icon>arrow_downward</mat-icon> {{ torrent.leechers | formatPeerCount }} leechers</span>
-              <span><mat-icon>calendar_today</mat-icon> {{ torrent.uploadedAt | date }}</span>
-              <span><mat-icon>person</mat-icon> {{ torrent.uploader }}</span>
-            </div>
-            <div *ngIf="torrent.comments?.length" class="torrent-comments">
-              <mat-icon>comment</mat-icon>
-              {{ torrentService.getTorrentCommentCount(torrent) }} komment
-            </div>
-          </div>
-        </div>
-        <ng-template #loading>
+          }
+        } @else {
           <mat-spinner diameter="40"></mat-spinner>
-        </ng-template>
+        }
       </div>
     </mat-card-content>
   </mat-card>
