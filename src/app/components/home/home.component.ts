@@ -24,4 +24,8 @@ export class HomeComponent {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
+
+  navigateToTorrentList() {
+    this.router.navigate(['/torrent-list']);
+  }
 }

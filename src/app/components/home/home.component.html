@@ -14,9 +14,15 @@
         <p>
           Fedezd fel a legjobb filmeket és sorozatokat! Ne hagyd ki a legújabb ajánlatokat!
         </p>
-        <mat-button mat-raised-button color="primary" matTooltip="További információk">
-          További ajánlások
-        </mat-button>
+        <div class="button-container">
+          <button mat-raised-button color="primary" matTooltip="További információk">
+            További ajánlások
+          </button>
+          <button mat-raised-button color="accent" (click)="navigateToTorrentList()" matTooltip="Torrent lista">
+            Torrent Lista
+            <mat-icon>list</mat-icon>
+          </button>
+        </div>
       </mat-card-content>
 
       <mat-card-footer>
